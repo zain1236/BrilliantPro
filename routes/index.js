@@ -8,6 +8,11 @@ var userRouter = require("./users")
 // const passport = require('../config/passport');
 // router.use(passport.initialize());
 
+router.use("/",(req,res)=>{
+    res.send("I am working");
+})
+
+
 router.use("/users",userRouter)
 // router.use("/products",passport.authenticate('jwt', { session: false }),productRouter)
 // router.use("/carts",passport.authenticate('jwt', { session: false }),shoppingCartRouter)
