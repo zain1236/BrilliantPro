@@ -1,5 +1,5 @@
 const model = require("../models/index")
-
+const jwt = require("jsonwebtoken");
 
 
 // access config var
@@ -12,9 +12,9 @@ function generate_accessTokens(username) {
       ts,
       { expiresIn: "7d" }
     );
-  }
+}
   
-  exports.login = async (req, res) => {
+exports.login = async (req, res) => {
     try {
       if (!req.body) {
         res.status(400).send({
@@ -37,7 +37,7 @@ function generate_accessTokens(username) {
           email: data.email,
           role: data.role,
         };
-        
+
         // console.log(data);
         const tokengen = generate_accessTokens(user);
         console.log("T:", tokengen);
@@ -49,7 +49,7 @@ function generate_accessTokens(username) {
       console.log("In Catch..");
       res.send({ Status: { Message: error.message } });
     }
-  };
+};
 
 exports.create = async (req, res) => {
     try {
