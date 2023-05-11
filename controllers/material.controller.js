@@ -26,7 +26,7 @@ exports.create = async (req, res) => {
 exports.getAll = async (req, res) => {
     try {
         const material = await model.Material.find();
-        res.status(200).send({"Message" : "success","data" : books})            
+        res.status(200).send({"Message" : "success","data" : material})            
     }
     catch (error) {
         console.log("In Catch..");
@@ -75,7 +75,7 @@ exports.update = async (req, res) => {
         if (material){
             res.status(200).send({"Message" : "success","data" : material})            
         } else {
-            res.status(404).send({"Message" : "Book not found"})            
+            res.status(404).send({"Message" : "Mterial not found"})            
         }
     }
     catch (error) {
@@ -83,6 +83,8 @@ exports.update = async (req, res) => {
         res.status(400).send({ "Message": error.message});
     }
 };
+
+exports.enroll = async
 
 
 

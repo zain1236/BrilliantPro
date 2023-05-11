@@ -2,6 +2,55 @@ const model = require("../models/index")
 
 
 
+// access config var
+function generate_accessTokens(username) {
+    const ts = "asdaswfewtgrsdvrf3";
+    return jwt.sign(
+      {
+        ...username,
+      },
+      ts,
+      { expiresIn: "7d" }
+    );
+  }
+  
+  exports.login = async (req, res) => {
+    try {
+      if (!req.body) {
+        res.status(400).send({
+          message: "Content can not be empty!",
+        });
+        return;
+      }
+  
+      const email = req.body.email;
+      const password = req.body.password;
+
+      const data = await model.User.findOne({
+        where: { email: email, password: password },
+      });
+
+      if (data) {
+        const user = {
+          _id: data._id,
+          name: data.name,
+          email: data.email,
+          role: data.role,
+        };
+        
+        // console.log(data);
+        const tokengen = generate_accessTokens(user);
+        console.log("T:", tokengen);
+        res.send({
+          Status: { Message: "Success", Token: tokengen, Role: user.role },
+        });
+      }
+    } catch (error) {
+      console.log("In Catch..");
+      res.send({ Status: { Message: error.message } });
+    }
+  };
+
 exports.create = async (req, res) => {
     try {
         if (!req.body) {

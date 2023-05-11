@@ -1,5 +1,5 @@
 const model = require("../models/index")
-
+const mongoose = require("mongoose")
 
 
 exports.create = async (req, res) => {
@@ -37,7 +37,32 @@ exports.getAll = async (req, res) => {
 exports.getOne = async (req, res) => {
     try {
         const {id} = req.params;
-        const course = await model.Course.findById(id);
+
+        const course = await model.Course.aggregate([
+            { $match: { _id: new mongoose.Types.ObjectId(id) } },
+            {
+                $lookup: {
+                  from: "materials",
+                  localField: "materials.materialId",
+                  foreignField: "_id",
+                  as: "materials_docs"
+                }
+              },
+              {
+                $addFields: {
+                  materials: "$materials_docs"
+                }
+              },
+              {
+                $project: {
+                  materials_docs: 0
+                }
+              }
+        ])
+
+
+        // const course = await model.Course.findById(id);
+        
         if (course){
             res.status(200).send({"Message" : "success","data" : course})            
         } else {
@@ -50,12 +75,61 @@ exports.getOne = async (req, res) => {
     }
 };
 
+exports.addMaterial = async (req, res) => {
+    try {
+        const {id} = req.params;
+
+        const course = await model.Course.findByIdAndUpdate(
+            id,
+            { $push: { materials: { materialId: req.body.materialId } } },
+            { new: true }
+          );
+
+        // const course = await model.Course.findById(id);
+        
+        if (course){
+            res.status(200).send({"Message" : "success","data" : course})            
+        } else {
+            res.status(404).send({"Message" : "Course not found"})            
+        }
+    }
+    catch (error) {
+        console.log("In Catch..");
+        res.status(400).send({ "Message": error.message});
+    }
+};
+
+exports.remMaterial = async (req, res) => {
+    try {
+        const {id} = req.params;
+
+        const course = await model.Course.findByIdAndUpdate(
+            id,
+            { $pull: { materials: { materialId: req.body.materialId } } },
+            { new: true }
+          );
+
+        // const course = await model.Course.findById(id);
+        
+        if (course){
+            res.status(200).send({"Message" : "success","data" : course})            
+        } else {
+            res.status(404).send({"Message" : "Course not found"})            
+        }
+    }
+    catch (error) {
+        console.log("In Catch..");
+        res.status(400).send({ "Message": error.message});
+    }
+};
+
+
 exports.delete = async (req, res) => {
     try {
         const {id} = req.params;
         const course = await model.Course.findByIdAndDelete(id);
 
-        if (material){
+        if (course){
             res.status(200).send({"Message" : "success","data" : course})            
         } else {
             res.status(404).send({"Message" : "Course not found"})            

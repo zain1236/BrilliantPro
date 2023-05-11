@@ -3,6 +3,8 @@ var router = express.Router();
 var controller = require("../controllers")
 
 
+router.post("/login",controller.User.login)
+
 router.post("/add",controller.User.create)
 
 router.get("/",controller.User.getAll)
