@@ -3,6 +3,7 @@ var router = express.Router();
 var controller = require("../controllers")
 
 
+router.get("/count",controller.All.summary)
 router.post("/add",controller.Course.create)
 router.post("/material/add/:id",controller.Course.addMaterial)
 router.post("/material/remove/:id",controller.Course.remMaterial)

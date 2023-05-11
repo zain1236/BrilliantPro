@@ -12,6 +12,7 @@ router.use("/users",userRouter)
 router.use("/materials",materialRouter)
 router.use("/courses",courseRouter)
 
+
 router.use("/",(req,res)=>{
     res.send("I am working");
 })
