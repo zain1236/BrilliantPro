@@ -6,7 +6,7 @@ exports.summary = async (req, res) => {
     try {
 
         // const bookValidate = await bookSchema.validateAsync(req.body);
-        const course = len(model.Material.find());
+        const course = (await model.Material.find()).length;
 
         console.log(course);
         res.status(200).send({"Message" : "success","data" : course})            
