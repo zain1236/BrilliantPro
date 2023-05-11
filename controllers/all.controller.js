@@ -8,7 +8,7 @@ exports.summary = async (req, res) => {
         // const bookValidate = await bookSchema.validateAsync(req.body);
         const course = model.Material.countDocuments();
         console.log(course);
-        res.status(200).send({"Message" : "success","data" : result})            
+        res.status(200).send({"Message" : "success","data" : course})            
     }
     catch (error) {
         console.log("In Catch..");
