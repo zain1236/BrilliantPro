@@ -6,7 +6,7 @@ exports.summary = async (req, res) => {
     try {
 
         // const bookValidate = await bookSchema.validateAsync(req.body);
-        const course = model.Material.countDocuments();
+        const course = model.Material.count();
         console.log(course);
         res.status(200).send({"Message" : "success","data" : course})            
     }
