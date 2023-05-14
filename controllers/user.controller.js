@@ -28,6 +28,7 @@ exports.login = async (req, res) => {
 
       const data = await model.User.findOne({ email: email, password: password });
 
+
       if (data) {
         const user = {
           _id: data._id,
@@ -59,6 +60,9 @@ exports.create = async (req, res) => {
         // const bookValidate = await bookSchema.validateAsync(req.body);
         const user = new model.User(req.body);
         const result = await user.save();
+
+        const audit = new model.AuditTrail({"collectionName" : "user" , "action" : "create" , "oldData" : user , "newData" : user})
+        await audit.save();
         res.status(200).send({"Message" : "success","data" : result})            
     }
     catch (error) {
@@ -71,6 +75,8 @@ exports.create = async (req, res) => {
 exports.getAll = async (req, res) => {
     try {
         const user = await model.User.find();
+        const audit = new model.AuditTrail({"collectionName" : "user" , "action" : "retreive" , "oldData" : user , "newData" : user})
+        await audit.save();
         res.status(200).send({"Message" : "success","data" : user})            
     }
     catch (error) {
@@ -83,6 +89,8 @@ exports.getOne = async (req, res) => {
     try {
         const {id} = req.params;
         const user = await model.User.findById(id);
+        const audit = new model.AuditTrail({"collectionName" : "user" , "action" : "retreive" , "oldData" : user , "newData" : user})
+        await audit.save();
         if (user){
             res.status(200).send({"Message" : "success","data" : user})            
         } else {
@@ -100,7 +108,8 @@ exports.enrolledCourses = async (req, res) => {
         const {id} = req.params;
 
         const courses = await model.Enroll.find({"learnerId" : id}).populate('courseId');
-
+        const audit = new model.AuditTrail({"collectionName" : "enroll" , "action" : "retreive" , "oldData" : courses , "newData" : courses})
+        await audit.save();
         if (courses){
             res.status(200).send({"Message" : "success","data" : courses})            
         } else {
@@ -118,7 +127,8 @@ exports.delete = async (req, res) => {
     try {
         const {id} = req.params;
         const user = await model.User.findByIdAndDelete(id);
-
+        const audit = new model.AuditTrail({"collectionName" : "user" , "action" : "delete" , "oldData" : user , "newData" : ""})
+        await audit.save();
         if (user){
             res.status(200).send({"Message" : "success","data" : user})            
         } else {
@@ -135,7 +145,8 @@ exports.update = async (req, res) => {
     try {
         const {id} = req.params;
         const user = await model.User.findByIdAndUpdate(id,{...req.body});
-
+        const audit = new model.AuditTrail({"collectionName" : "user" , "action" : "update" , "oldData" : user , "newData" : ""})
+        await audit.save();
         if (user){
             res.status(200).send({"Message" : "success","data" : user})            
         } else {

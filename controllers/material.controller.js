@@ -14,6 +14,9 @@ exports.create = async (req, res) => {
         // const bookValidate = await bookSchema.validateAsync(req.body);
         const material = new model.Material(req.body);
         const result = await material.save();
+
+        const audit = new model.AuditTrail({"collectionName" : "Material" , "action" : "create" , "oldData" : result , "newData" : result})
+        await audit.save();
         res.status(200).send({"Message" : "success","data" : result})            
     }
     catch (error) {
