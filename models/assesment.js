@@ -1,26 +1,23 @@
 const mongoose = require('mongoose');
 
 const questionSchema = new mongoose.Schema({
-  questionText: {
+  text: {
     type: String,
     required: true
   },
   options: [
     {
-      optionText: {
+      text: {
         type: String,
         required: true
       },
-      isCorrect: {
+      correct: {
         type: Boolean,
         default: false
       }
     }
   ],
 });
-
-
-const mongoose = require('mongoose');
 
 const assessmentSchema = new mongoose.Schema({
   title: {
@@ -29,6 +26,14 @@ const assessmentSchema = new mongoose.Schema({
   },
   description: {
     type: String,
+    required: true
+  },
+  duration : {
+    type: Number,
+    required: true
+  },
+  passing : {
+    type: Number,
     required: true
   },
   questions: [questionSchema]

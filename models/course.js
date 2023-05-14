@@ -10,6 +10,10 @@ const courseSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    thumbnail: {
+        type: String,
+        required: true
+    },
     instructor: {
         type: String,
         required: true
@@ -20,6 +24,9 @@ const courseSchema = mongoose.Schema({
     },
     materials: [{
         materialId: mongoose.Schema.Types.ObjectId,
+    }],
+    assesments: [{
+        assesmentId: mongoose.Schema.Types.ObjectId,
     }]
 },{ timestamps: true })
 

@@ -38,6 +38,10 @@ exports.getOne = async (req, res) => {
     try {
         const {id} = req.params;
 
+        // const a =await model.Course.findById(id).populate('assesments.assesmentId')
+        // console.log(a);
+
+
         const course = await model.Course.aggregate([
             { $match: { _id: new mongoose.Types.ObjectId(id) } },
             {
@@ -45,21 +49,19 @@ exports.getOne = async (req, res) => {
                   from: "materials",
                   localField: "materials.materialId",
                   foreignField: "_id",
-                  as: "materials_docs"
+                  as: "materials"
                 }
-              },
-              {
-                $addFields: {
-                  materials: "$materials_docs"
+            },
+            {
+                $lookup: {
+                  from: "assesments",
+                  localField: "assesments.assesmentId",
+                  foreignField: "_id",
+                  as: "assesments"
                 }
-              },
-              {
-                $project: {
-                  materials_docs: 0
-                }
-              }
+            }
+            
         ])
-
 
         // const course = await model.Course.findById(id);
         

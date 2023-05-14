@@ -5,12 +5,15 @@ var userRouter = require("./users")
 var materialRouter = require("./material")
 var courseRouter = require("./course")
 var assesmentRouter = require("./assesment")
+var enrollRouter = require("./enroll")
+
 // var unauthUserRouter = require("./unauth.user")
 // const passport = require('../config/passport');
 // router.use(passport.initialize());
 
-router.use("/users",assesmentRouter)
-router.use("/assesments",userRouter)
+router.use("/users",userRouter)
+router.use("/enroll",enrollRouter)
+router.use("/assesments",assesmentRouter)
 router.use("/materials",materialRouter)
 router.use("/courses",courseRouter)
 
